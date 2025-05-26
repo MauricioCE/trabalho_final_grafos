@@ -1,4 +1,4 @@
-import { Constants } from "../constants";
+import { getNeighbors } from "../../utils/generalUtils";
 import { GameMap, TileData, Vector2 } from "../types";
 
 export function bfs(
@@ -39,21 +39,4 @@ function included(visited: Vector2[], coord: Vector2) {
   return visited.some(
     (visitedCoord) => visitedCoord.x === coord.x && visitedCoord.y === coord.y
   );
-}
-
-function getNeighbors(coord: Vector2, map: GameMap): TileData[] {
-  const neighbors: TileData[] = [];
-
-  for (const dir of Constants.getDirections()) {
-    try {
-      const adjacentTile = map[coord.x + dir.x][coord.y + dir.y];
-      if (adjacentTile.type === "floor") {
-        neighbors.push(adjacentTile);
-      }
-    } catch {
-      continue;
-    }
-  }
-
-  return neighbors;
 }
