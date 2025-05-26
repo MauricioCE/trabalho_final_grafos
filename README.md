@@ -20,3 +20,14 @@ Os seguintes algoritmos já foram implementados:
 - **Linguagem:** Typescript
 - **CSS-in-JS:** Emotion
 - **State Management:** Zustand
+
+
+Local dos algoritmos
+src\common\path_finder
+
+Local do Bot
+src\components\game\actors\Bot.tsx
+
+Local de todos os types
+src\common\types.ts
+

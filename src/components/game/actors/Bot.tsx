@@ -6,7 +6,7 @@ import { GameMap, GameState, Vector2 } from "../../../common/types";
 import { bfs } from "../../../common/path_finder/bfs";
 import { isSamePosition } from "../../../utils/positionUtils";
 import { useGameplayStore } from "../../../stores/gameplayStore";
-import { dijisctra, djkstra } from "../../../common/path_finder/djkstra";
+import { djkstra } from "../../../common/path_finder/djkstra";
 import { salesman } from "../../../common/path_finder/salesman";
 
 type Props = {
@@ -25,6 +25,7 @@ function Bot({ initialCoord, pointsCoords: pointsCoordsProp }: Props) {
   const setBotScore = useGameplayStore((state) => state.setBotScore);
   const map = useGameStore((state) => state.map);
   const setPoints = useGameStore((state) => state.setBotPointsCoords);
+  const setPath = useGameStore((state) => state.setPath);
   const waitDuration = 200;
 
   function handleMovement() {
@@ -33,11 +34,13 @@ function Bot({ initialCoord, pointsCoords: pointsCoordsProp }: Props) {
     if (currentPath.current.length === 0) {
       handlePoint();
       currentPath.current = getNearestPath(
-        "djkstra",
+        "bfs",
         coord,
         map,
         pointsCoords.current
       );
+
+      setPath([coord, ...currentPath.current]);
     }
 
     const nextCoord = currentPath.current.shift();
