@@ -40,6 +40,8 @@ export type Stage = {
   tilesLayout: string[];
 };
 
+export type StageResult = "win" | "lose";
+
 export type TileData = {
   coord: Vector2;
   speed: number;

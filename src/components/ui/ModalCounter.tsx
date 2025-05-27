@@ -36,10 +36,12 @@ export default function ModalCounter({ duration, onTimerOut }: Props) {
 
   return (
     <div css={wrapperStyle}>
+      <div css={backgroundStyle} />
       <AnimatePresence mode="wait">
         <motion.div
           initial={{ opacity: 0, scale: 0.1 }}
           animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.1 }}
           key={text}
           css={counterStyle}
           onAnimationComplete={onTimerEnded}
@@ -58,12 +60,19 @@ const wrapperStyle = css`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #00000052;
   z-index: 1000;
 `;
 
+const backgroundStyle = css`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  background-color: #fff;
+`;
+
 const counterStyle = css`
-  color: #232323;
-  -webkit-text-stroke: 2px white;
+  color: #000;
   font-size: 7rem;
+  z-index: 1;
 `;

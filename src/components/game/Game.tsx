@@ -1,5 +1,3 @@
-// COMPONENT =====================================================================================
-
 import { ReactNode, useState } from "react";
 import GameplayScreen from "./screens/GameplayScreen";
 import StartScreen from "./screens/StartScreen";

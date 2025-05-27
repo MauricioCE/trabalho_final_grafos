@@ -2,7 +2,7 @@ import { css } from "@emotion/react";
 import BotPoints from "../../ui/points/BotPoints";
 import PlayerPoints from "../../ui/points/PlayerPoints";
 import InputManager from "../InputManager";
-import { Stage } from "../../../common/types";
+import { Stage, StageResult } from "../../../common/types";
 import { Constants } from "../../../common/constants";
 import Map from "../Map";
 import { motion } from "motion/react";
@@ -10,28 +10,28 @@ import ModalCounter from "../../ui/ModalCounter";
 import { useState } from "react";
 import { useGameplayStore } from "../../../stores/gameplayStore";
 import { stages } from "../../../stages/stages";
+import StageWinLoseModal from "../../ui/StageWinLoseModal";
 
-const stage: Stage = stages[1];
+const stage: Stage = stages[0];
 const maxWidth = "1600px";
 
 export default function GameplayScreen() {
-  const setGameState = useGameplayStore((state) => state.setGameState);
   const [showCounter, setShowCounter] = useState(true);
-
+  let stageResult: StageResult | undefined;
+  const setGameState = useGameplayStore((state) => state.setGameState);
   const playerScore = useGameplayStore((state) => state.playerScore);
   const botScore = useGameplayStore((state) => state.botScore);
   const maxScore = useGameplayStore((state) => state.maxScore);
-
   const counterDuration = 3;
 
   if (playerScore === maxScore) {
-    console.log("Player Ganhou");
     setGameState("paused");
+    stageResult = "win";
   }
 
   if (botScore === maxScore) {
-    console.log("Bot Ganhou");
     setGameState("paused");
+    stageResult = "lose";
   }
 
   function startGameplay() {
@@ -42,6 +42,7 @@ export default function GameplayScreen() {
   return (
     <>
       <InputManager />
+      {stageResult && <StageWinLoseModal result={stageResult} />}
       {showCounter && (
         <ModalCounter duration={counterDuration} onTimerOut={startGameplay} />
       )}
@@ -78,6 +79,7 @@ const headerStyle = css`
 
 const wrapperStyle = css`
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   align-items: center;
