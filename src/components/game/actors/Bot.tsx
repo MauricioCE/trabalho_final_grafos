@@ -6,7 +6,7 @@ import { GameMap, GameState, Vector2 } from "../../../common/types";
 import { bfs } from "../../../common/path_finder/bfs";
 import { isSamePosition } from "../../../utils/positionUtils";
 import { useGameplayStore } from "../../../stores/gameplayStore";
-import { djkstra } from "../../../common/path_finder/djkstra";
+import { djkstra } from "../../../common/path_finder/dijkstra";
 import { salesman } from "../../../common/path_finder/salesman";
 
 type Props = {
@@ -79,7 +79,7 @@ function Bot({ initialCoord, pointsCoords: pointsCoordsProp }: Props) {
 // FUNCTIONS =====================================================================================
 
 function getNearestPath(
-  algorithmName: "bfs" | "djkstra" | "salesman",
+  algorithmName: "bfs" | "dijkstra" | "salesman",
   botCoord: Vector2,
   map: GameMap,
   pointsCoords: Vector2[]
@@ -87,7 +87,7 @@ function getNearestPath(
   switch (algorithmName) {
     case "bfs":
       return bfs(botCoord, pointsCoords, map);
-    case "djkstra":
+    case "dijkstra":
       return djkstra(botCoord, pointsCoords, map);
     case "salesman":
       return salesman(botCoord, pointsCoords, map);
