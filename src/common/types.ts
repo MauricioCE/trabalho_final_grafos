@@ -38,7 +38,7 @@ export type Size = {
 export type Stage = {
   stageName: string;
   nextStage: string;
-  algorithm: "bfs" | "djkstra" | "salesman";
+  algorithm: Algorithm;
   playerCoord: Vector2;
   playerPointsCoords: Vector2[];
   botCoord: Vector2;
