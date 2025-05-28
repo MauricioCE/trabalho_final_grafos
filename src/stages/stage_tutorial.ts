@@ -1,8 +1,8 @@
 import { Stage } from "../common/types";
 
-export const stage_0: Stage = {
+export const stage_tutorial: Stage = {
   stageName: "Tutorial - BFS",
-  nextStage: 1,
+  nextStage: "1",
   algorithm: "bfs",
   maxPoints: 7,
   width: 23,

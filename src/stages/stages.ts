@@ -1,10 +1,12 @@
-import { stage_0 } from "./stage_0";
+import { stage_test } from "./stage_test";
+import { stage_tutorial } from "./stage_tutorial";
 import { stage_1 } from "./stage_1";
 import { stage_2 } from "./stage_2";
 import { stage_3 } from "./stage_3";
 
 const stages = {
-  stage_0: stage_0,
+  stage_test: stage_test,
+  stage_tutorial: stage_tutorial,
   stage_1: stage_1,
   stage_2: stage_2,
   stage_3: stage_3,

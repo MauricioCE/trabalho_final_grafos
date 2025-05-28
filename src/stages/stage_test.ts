@@ -1,8 +1,8 @@
 import { Stage } from "../common/types";
 
-export const stage_2: Stage = {
-  stageName: "Fase 2 - bfs mudar",
-  nextStage: "3",
+export const stage_test: Stage = {
+  stageName: "Fase teste",
+  nextStage: "1",
   algorithm: "bfs",
   maxPoints: 12,
   width: 23,

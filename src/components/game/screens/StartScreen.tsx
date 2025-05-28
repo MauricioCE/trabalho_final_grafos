@@ -25,7 +25,7 @@ export default function StartScreen() {
         variants={exitAnimation}
         css={wrapperStyle}
       >
-        <ArrowsButton onClick={() => navigate("/stage/0")}>
+        <ArrowsButton onClick={() => navigate("/stage/test")}>
           Start Game
         </ArrowsButton>
       </motion.div>
