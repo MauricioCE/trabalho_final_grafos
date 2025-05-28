@@ -6,7 +6,7 @@ import { Algorithm, GameMap, Vector2 } from "../../../common/types";
 import { bfs } from "../../../common/path_finder/bfs";
 import { isSamePosition } from "../../../utils/positionUtils";
 import { useGameplayStore } from "../../../stores/gameplayStore";
-import { djkstra } from "../../../common/path_finder/djkstra";
+import { djkstra } from "../../../common/path_finder/dijkstra";
 import { salesman } from "../../../common/path_finder/salesman";
 
 type Props = {
