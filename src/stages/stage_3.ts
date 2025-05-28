@@ -3,7 +3,7 @@ import { Stage } from "../common/types";
 export const stage_3: Stage = {
   stageName: "Fase 3 - ????",
   nextStage: 0,
-  algorithm: "bfs",
+  algorithm: "djkstra",
   maxPoints: 12,
   width: 23,
   height: 14,

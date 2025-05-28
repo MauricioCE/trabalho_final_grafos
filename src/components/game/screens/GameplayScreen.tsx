@@ -31,6 +31,10 @@ export default function GameplayScreen() {
   const counterDuration = 0;
 
   useEffect(() => {
+    setAlgorithm(stage.algorithm);
+  }, [setAlgorithm, stage]);
+
+  useEffect(() => {
     if (playerScore === maxScore) {
       setGameState("paused");
       setResult("win");
