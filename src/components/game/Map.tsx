@@ -6,14 +6,15 @@ import { useMemo } from "react";
 import Player from "./actors/Player";
 import Bot from "./actors/Bot";
 import PointsLayer from "./layers/PointsLayer";
-import { GameMapData, Stage, TileData, TileType } from "../../common/types";
+import { StageData, Stage, TileData, TileType } from "../../common/types";
 import PathLayer from "./layers/PathLayer";
+import { useGameplayStore } from "../../stores/gameplayStore";
 
 enum TileTypeId {
-  DEFAULT = "d",
-  SLOW_01 = "1",
-  SLOW_02 = "2",
-  SLOW_03 = "3",
+  DEFAULT = "1",
+  SLOW_01 = "2",
+  SLOW_02 = "3",
+  SLOW_03 = "4",
   TREE = "t",
 }
 
@@ -32,12 +33,15 @@ export default function Map({ stage, ...rest }: Props) {
   );
   const setBotPointsCoords = useGameStore((state) => state.setBotPointsCoords);
   const setMapSize = useGameStore((state) => state.setMapSize);
-  const mapData = useMemo(() => {
-    const data = generateMapData(stage);
+  const setMaxScore = useGameplayStore((state) => state.setMaxScore);
+
+  const stageData = useMemo(() => {
+    const data = getStageData(stage);
     setMap(data.map);
     setMapSize(data.size);
     setPlayerPointsCoords(data.playerPointsCoords);
     setBotPointsCoords(data.botPointsCoords);
+    setMaxScore(data.maxPoints);
     return data;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
@@ -47,19 +51,18 @@ export default function Map({ stage, ...rest }: Props) {
       <svg
         width="100%"
         height="100%"
-        viewBox={`0 0 ${mapData.size.width - Constants.map.tileGap} ${
-          mapData.size.height - Constants.map.tileGap
+        viewBox={`0 0 ${stageData.size.width - Constants.map.tileGap} ${
+          stageData.size.height - Constants.map.tileGap
         }`}
         preserveAspectRatio="xMidYMin meet"
       >
-        {/* <rect width="100%" height="100%" fill={Theme.gapColor} /> */}
         <TilesLayer />
         <PointsLayer />
         <PathLayer />
-        <Player initialCoord={mapData.playerCoord} />
+        <Player initialCoord={stageData.playerCoord} />
         <Bot
-          initialCoord={mapData.botCoord}
-          pointsCoords={mapData.botPointsCoords}
+          initialCoord={stageData.botCoord}
+          pointsCoords={stageData.botPointsCoords}
         />
       </svg>
     </div>
@@ -68,7 +71,7 @@ export default function Map({ stage, ...rest }: Props) {
 
 // FUNCTIONS =====================================================================================
 
-function generateMapData(stage: Stage): GameMapData {
+function getStageData(stage: Stage): StageData {
   const map: TileData[][] = [];
   const mapHeight = stage.height;
   const mapWidth = stage.width;
@@ -98,6 +101,7 @@ function generateMapData(stage: Stage): GameMapData {
     playerPointsCoords: stage.playerPointsCoords,
     botCoord: stage.botCoord,
     botPointsCoords: stage.botPointsCoords,
+    maxPoints: stage.maxPoints,
   };
 }
 
@@ -143,5 +147,5 @@ const wrapperStyle = css`
   height: 100%;
   border: 3px dotted #a0a0a0;
   border-radius: 20px;
-  padding: 30px;
+  padding: 20px;
 `;

@@ -2,10 +2,7 @@ import { css } from "@emotion/react";
 import { Constants } from "../../../common/constants";
 import { motion } from "motion/react";
 import ArrowsButton from "../../ui/ArrowsButton";
-
-type Props = {
-  onStart: () => void;
-};
+import { useNavigate } from "react-router";
 
 const exitAnimation = {
   exit: {
@@ -18,7 +15,8 @@ const exitAnimation = {
   },
 };
 
-export default function StartScreen({ onStart }: Props) {
+export default function StartScreen() {
+  const navigate = useNavigate();
   return (
     <>
       <div css={backgroundStyle} />
@@ -27,7 +25,9 @@ export default function StartScreen({ onStart }: Props) {
         variants={exitAnimation}
         css={wrapperStyle}
       >
-        <ArrowsButton onClick={onStart}>Start Game</ArrowsButton>
+        <ArrowsButton onClick={() => navigate("/stage/0")}>
+          Start Game
+        </ArrowsButton>
       </motion.div>
     </>
   );

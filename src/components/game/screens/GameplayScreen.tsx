@@ -1,65 +1,82 @@
 import { css } from "@emotion/react";
-import BotPoints from "../../ui/points/BotPoints";
-import PlayerPoints from "../../ui/points/PlayerPoints";
 import InputManager from "../InputManager";
-import { Stage, StageResult } from "../../../common/types";
+import { StageResult } from "../../../common/types";
 import { Constants } from "../../../common/constants";
 import Map from "../Map";
 import { motion } from "motion/react";
 import ModalCounter from "../../ui/ModalCounter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGameplayStore } from "../../../stores/gameplayStore";
-import { stages } from "../../../stages/stages";
+import { getStage } from "../../../stages/stages";
 import StageWinLoseModal from "../../ui/StageWinLoseModal";
-
-const stage: Stage = stages[0];
-const maxWidth = "1600px";
+import { useNavigate, useParams } from "react-router";
+import GameplayHeader from "../../ui/GameplayHeader";
 
 export default function GameplayScreen() {
   const [showCounter, setShowCounter] = useState(true);
-  let stageResult: StageResult | undefined;
-  const setGameState = useGameplayStore((state) => state.setGameState);
+  const [result, setResult] = useState<StageResult | null>(null);
+
   const playerScore = useGameplayStore((state) => state.playerScore);
-  const botScore = useGameplayStore((state) => state.botScore);
+  const setBotScore = useGameplayStore((state) => state.setBotScore);
   const maxScore = useGameplayStore((state) => state.maxScore);
-  const counterDuration = 3;
 
-  if (playerScore === maxScore) {
-    setGameState("paused");
-    stageResult = "win";
-  }
+  const setAlgorithm = useGameplayStore((state) => state.setAlgorithm);
+  const setPlayerScore = useGameplayStore((state) => state.setPlayerScore);
+  const botScore = useGameplayStore((state) => state.botScore);
+  const setGameState = useGameplayStore((state) => state.setGameState);
 
-  if (botScore === maxScore) {
-    setGameState("paused");
-    stageResult = "lose";
-  }
+  const { stageId } = useParams();
+  const navigate = useNavigate();
+  const stage = getStage(stageId!);
+  const counterDuration = 0;
+
+  useEffect(() => {
+    if (playerScore === maxScore) {
+      setGameState("paused");
+      setResult("win");
+    }
+
+    if (botScore === maxScore) {
+      setGameState("paused");
+      setResult("lose");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [botScore, playerScore]);
 
   function startGameplay() {
     setGameState("running");
     setShowCounter(false);
   }
 
+  function handleStageEnded() {
+    if (result === "win") {
+      setGameState("not-initialized");
+      setResult(null);
+      setShowCounter(true);
+      setPlayerScore(0);
+      setBotScore(0);
+      navigate(`/stage/${stage.nextStage}`);
+      setAlgorithm(stage.algorithm);
+      return;
+    }
+
+    window.location.reload();
+  }
+
   return (
     <>
       <InputManager />
-      {stageResult && <StageWinLoseModal result={stageResult} />}
-      {showCounter && (
-        <ModalCounter duration={counterDuration} onTimerOut={startGameplay} />
-      )}
+      {renderStageWinLoseModal(result, handleStageEnded)}
+      {renderTimer(showCounter, counterDuration, startGameplay)}
       <div css={backgroundStyle} />
-      <div id="game-view" css={wrapperStyle}>
+      <div css={wrapperStyle}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
           css={mainContainerStyle}
         >
-          <div css={headerStyle}>
-            <PlayerPoints />
-            <span css={textStyle}>Fase 1 - Algoritmo BFS</span>
-            <BotPoints />
-          </div>
-          {/* Map */}
+          <GameplayHeader css={headerStyle} stageName={stage.stageName} />
           <Map css={mapStyle} stage={stage} />
         </motion.div>
       </div>
@@ -67,15 +84,30 @@ export default function GameplayScreen() {
   );
 }
 
-// STYLES =====================================================================================
+function renderStageWinLoseModal(
+  stageResult: StageResult | null,
+  handleStageEnded: () => void
+) {
+  return (
+    stageResult && (
+      <StageWinLoseModal onClick={handleStageEnded} result={stageResult} />
+    )
+  );
+}
 
-const headerStyle = css`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 90svh;
-  padding: 0 20px;
-`;
+function renderTimer(
+  showCounter: boolean,
+  duration: number,
+  onStateGameplay: () => void
+) {
+  return (
+    showCounter && (
+      <ModalCounter duration={duration} onTimerOut={onStateGameplay} />
+    )
+  );
+}
+
+// STYLES =====================================================================================
 
 const wrapperStyle = css`
   display: flex;
@@ -96,10 +128,13 @@ const mainContainerStyle = css`
   justify-content: center;
   align-items: center;
   width: 100%;
-  max-width: ${maxWidth};
   height: 100%;
   padding: 10px 20px;
   flex: 1;
+`;
+
+const headerStyle = css`
+  max-width: 130svh;
 `;
 
 const backgroundStyle = css`
@@ -117,11 +152,5 @@ const mapStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 90svh;
-`;
-
-const textStyle = css`
-  font-size: 1.4rem;
-  color: #3d3d3d;
-  font-weight: 600;
+  max-width: 130svh;
 `;

@@ -4,9 +4,10 @@ import ArrowsButton from "./ArrowsButton";
 
 type Props = {
   result: StageResult;
+  onClick: () => void;
 };
 
-export default function StageWinLoseModal({ result: state }: Props) {
+export default function StageWinLoseModal({ result: state, onClick }: Props) {
   return (
     <div css={wrapper(state)}>
       <div css={backgroundStyle(state)} />
@@ -15,6 +16,7 @@ export default function StageWinLoseModal({ result: state }: Props) {
         arrowSize="10px"
         css={buttonStyle}
         color={state === "win" ? "#2d2d2d" : "#fff"}
+        onClick={onClick}
       >
         {state === "win" ? "Next stage" : "Retry"}
       </ArrowsButton>

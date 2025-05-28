@@ -1,17 +1,22 @@
+export type Actors = "player" | "bot" | "none";
+
+export type Algorithm = "bfs" | "djkstra" | "salesman";
+
 export type Direction = "up" | "down" | "left" | "right";
 
 export type GameMap = TileData[][];
 
-export type GameMapData = {
+export type StageData = {
   map: GameMap;
   size: Size;
   playerCoord: Vector2;
   playerPointsCoords: Vector2[];
   botCoord: Vector2;
   botPointsCoords: Vector2[];
+  maxPoints: number;
 };
 
-export type GameState = "running" | "paused";
+export type GameState = "not-initialized" | "running" | "paused" | "finished";
 
 export type MovementKeys = {
   up: string;
@@ -31,10 +36,14 @@ export type Size = {
 };
 
 export type Stage = {
+  stageName: string;
+  nextStage: number;
+  algorithm: "bfs" | "djkstra" | "salesman";
   playerCoord: Vector2;
   playerPointsCoords: Vector2[];
   botCoord: Vector2;
   botPointsCoords: Vector2[];
+  maxPoints: number;
   width: number;
   height: number;
   tilesLayout: string[];

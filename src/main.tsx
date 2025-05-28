@@ -1,12 +1,12 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
 import "./index.css";
-import Game from "./components/game/Game.tsx";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router";
+import GameRoutes from "./routes/GameRoutes.tsx";
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <Game />
-  </StrictMode>
+const root = document.getElementById("root");
 
-  // <Game />
+ReactDOM.createRoot(root!).render(
+  <BrowserRouter>
+    <GameRoutes />
+  </BrowserRouter>
 );

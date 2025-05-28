@@ -19,16 +19,25 @@ const moveKeys: MovementKeys = {
 };
 
 function Player({ initialCoord }: { initialCoord: Vector2 }) {
-  const [coord, setCoord] = useState(initialCoord);
   const [canMove, setCanMove] = useState(false);
+  const [coord, setCoord] = useState(initialCoord);
   const [speed, setSpeed] = useState(0);
-  const gameState = useGameplayStore((state) => state.gameState);
+
+  const gameState = useGameplayStore((state) => state.gameplayState);
   const maxScore = useGameplayStore((state) => state.maxScore);
   const setPlayerScore = useGameplayStore((state) => state.setPlayerScore);
+
+  const map = useGameStore((state) => state.map);
   const pressedKey = useGameStore((state) => state.pressedKey);
   const pointsCoords = useGameStore((state) => state.playerPointsCoords);
   const setPointsCoords = useGameStore((state) => state.setPlayerPointsCoords);
-  const map = useGameStore((state) => state.map);
+
+  useEffect(() => {
+    if (gameState === "not-initialized") {
+      setCoord(initialCoord);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameState]);
 
   useHandleState(gameState, setCanMove);
 
