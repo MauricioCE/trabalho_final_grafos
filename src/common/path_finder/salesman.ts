@@ -1,5 +1,5 @@
 import { GameMap, TileData, Vector2 } from "../types";
-import { bfs } from "./bfs";
+import { djkstra } from "./dijkstra"
 
 //funções auxiliares
 
@@ -23,8 +23,8 @@ function precomputeDistances(
         //se o ponto destino é a propria origem, obviamente o custo é 0 e o caminho é a coord onde ele está
         result[getKey(from)][getKey(to)] = { cost: 0, path: [from] };
       } else {
-        //se não, faz bfs para ver a distancia do ponto origem até destino, reaproveitando o bfs já feito
-        const path = bfs(from, [to], map);
+        //se não, usa o dijsktra para ver a distancia do ponto origem até destino
+        const path = djkstra(from, [to], map);
         result[getKey(from)][getKey(to)] = { cost: path.length - 1, path };
       }
     }
