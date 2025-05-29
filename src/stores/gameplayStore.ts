@@ -22,7 +22,7 @@ export const useGameplayStore = create<GameplayStore>((set) => ({
   playerScore: 0,
   botScore: 0,
   maxScore: 5,
-  algorithm: "bfs",
+  algorithm: "dfs",
   stageName: "Sem nome",
 
   setGameState: (state: GameState) => set({ gameplayState: state }),
