@@ -3,7 +3,7 @@ import { Stage } from "../common/types";
 export const stage_test: Stage = {
   stageName: "Fase teste",
   nextStage: "1",
-  algorithm: "bfs",
+  algorithm: "salesman",
   maxPoints: 12,
   width: 23,
   height: 14,

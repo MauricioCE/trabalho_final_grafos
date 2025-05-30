@@ -1,88 +1,111 @@
-import { GameMap, TileData, Vector2 } from "../types";
-import { djkstra } from "./dijkstra"
+import { GameMap, Vector2 } from "../types";
+import { djkstra } from "./dijkstra";
 
-//funções auxiliares
-
-//função para simplicar a busca até as coordenadas x e y, diminuindo o trabalho
-function getKey(coord: Vector2): string {
-  return `${coord.x},${coord.y}`;
-}
-
-function precomputeDistances(
-  points: Vector2[],
-  map: GameMap
-): Record<string, Record<string, { cost: number; path: Vector2[] }>> {
-  const result: Record<string, Record<string, { cost: number; path: Vector2[] }>> = {};
-
-  //iterando em todos os pontos
-  for (const from of points) {
-    result[getKey(from)] = {};
-    //iterando para obter as distancias até os outros pontos
-    for (const to of points) {
-      if (from.x === to.x && from.y === to.y) {
-        //se o ponto destino é a propria origem, obviamente o custo é 0 e o caminho é a coord onde ele está
-        result[getKey(from)][getKey(to)] = { cost: 0, path: [from] };
-      } else {
-        //se não, usa o dijsktra para ver a distancia do ponto origem até destino
-        const path = djkstra(from, [to], map);
-        result[getKey(from)][getKey(to)] = { cost: path.length - 1, path };
-      }
+// Heap's Algorithm
+function* permute(arr: number[]): Generator<number[]> {
+  const n = arr.length;
+  const c = new Array(n).fill(0);
+  const output = arr.slice();
+  yield output.slice();
+  let i = 0;
+  while (i < n) {
+    if (c[i] < i) {
+      const k = i % 2 === 1 ? c[i] : 0;
+      [output[i], output[k]] = [output[k], output[i]];
+      yield output.slice();
+      c[i]++;
+      i = 0;
+    } else {
+      c[i] = 0;
+      i++;
     }
   }
-
-  //nesse retorno, teremos todas as distancias de todos as coords entre si (que importam, ou seja o bot e os pontos)
-  return result;
 }
 
-//FUNÇÃO PRINCIPAL
+// calcula o custo com o dijkstra
+function getCost(
+  from: Vector2,
+  to: Vector2,
+  map: GameMap
+): { cost: number; path: Vector2[] } {
+  const path = djkstra(from, [to], map);
+  const cost = path.length;
+  return { cost, path };
+}
 
+// algoritmo principal
 export function salesman(
   botCoord: Vector2,
   pointsCoords: Vector2[],
   map: GameMap
 ): Vector2[] {
-  
-  if (map.length === 0) return [];
+  if (!botCoord || pointsCoords.length === 0 || map.length === 0) return [];
 
-  if (!botCoord || !pointsCoords) return [];
+  const n = pointsCoords.length;
+  const nodes = [botCoord, ...pointsCoords];
 
-  const allPoints = [botCoord, ...pointsCoords]
-  //pré-calculo das distancia entre o bot e os pontos
-  const distances = precomputeDistances(allPoints, map);
+  // matriz de custos, inicia com tudo infinito
+  const costMatrix: number[][] = Array(n + 1)
+    .fill(0)
+    .map(() => Array(n + 1).fill(Infinity));
 
-  let bestPath: Vector2[] = [];
-  let minCost = Infinity;
+  // matriz de caminhos, inicia com tudo vazio
+  const pathMatrix: Vector2[][][] = Array(n + 1)
+    .fill(0)
+    .map(() => Array(n + 1).fill([]));
 
-  //implementacao do dfs para determinar o melhor caminho entre todos os calculados (implementação com recursão)
-  function dfs(current: Vector2, visited: Vector2[], cost: number) {
-    //se todos os pontos foram visitados:
-    if (visited.length === pointsCoords.length + 1) {
-      //adiciona ao custo total o custo até a origem (botCoord), padrão do TSP
-      const returnCost = distances[getKey(current)][getKey(botCoord)].cost;
-      const totalCost = cost + returnCost;
-      //se o custo foi o melhor até agora:
-      if (totalCost < minCost) {
-        minCost = totalCost;
-        bestPath = [...visited, ...distances[getKey(current)][getKey(botCoord)].path.slice(1)];
+  // preenche a matriz de custos e caminhos
+  for (let i = 0; i <= n; i++) {
+    for (let j = 0; j <= n; j++) {
+      if (i === j) {
+        costMatrix[i][j] = 0;
+        pathMatrix[i][j] = [];
+        continue;
       }
-      //encerra a função
-      return;
-    }
-
-    //se ainda temos pontos a explorar:
-    for (const point of pointsCoords) {
-      //se já foi visitado, pula:
-      if (visited.some(v => v.x === point.x && v.y === point.y)) continue;
-      //obtem o custo até o ponto
-      const { cost: nextCost, path: nextPath } = distances[getKey(current)][getKey(point)];
-      //RECURSÃO:
-      //para cada "point", continua buscando caminhos melhores
-      dfs(point, [...visited, ...nextPath.slice(1)], cost + nextCost);
+      //com o dijkstra, determina o caminho e custo de um ponto ao outro
+      const { cost, path } = getCost(nodes[i], nodes[j], map);
+      costMatrix[i][j] = cost;
+      pathMatrix[i][j] = path;
     }
   }
 
-  //dfs configura o bestpath para que o bot obtenha o melhor caminho possivel no mapa
-  dfs(botCoord, [botCoord], 0);
+  let bestCost = Infinity;
+  let bestRoute: number[] = [];
 
-  return bestPath;
+  //avalia todas as permutações dos pontos
+  //.keys(): retorna indice de cada elemento
+  //assim temos um array de indices para permutar 
+  //.map(): está incremente em 1 cada indice (ignorar o 0 pq ele é o bot)
+  for (const perm of permute([...Array(n).keys()].map((i) => i + 1))) {
+    let totalCost = 0;
+    let current = 0; // começa no bot
+    let pruned = false; //controla caminhos que ja são piores imediatamente
+
+    //avaliando o custo de cada permutação
+    for (const next of perm) {
+      const c = costMatrix[current][next];
+      totalCost += c;
+
+      //se o custo total já é pior que o melhor, descarta
+      if (totalCost >= bestCost) {
+        pruned = true;
+        break;
+      }
+
+      current = next;
+    }
+
+    if (!pruned && totalCost < bestCost) {
+      bestCost = totalCost;
+      bestRoute = perm;
+    }
+  }
+
+  if (bestRoute.length === 0) return [];
+
+  //monta o caminho apenas até o primeiro ponto da melhor rota
+  const firstTarget = bestRoute[0];
+  const pathToFirst = pathMatrix[0][firstTarget];
+
+  return pathToFirst;
 }
