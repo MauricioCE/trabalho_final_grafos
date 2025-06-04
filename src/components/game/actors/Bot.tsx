@@ -8,6 +8,7 @@ import { isSamePosition } from "../../../utils/positionUtils";
 import { useGameplayStore } from "../../../stores/gameplayStore";
 import { djkstra } from "../../../common/path_finder/dijkstra";
 import { salesman } from "../../../common/path_finder/salesman";
+import { dfs } from "../../../common/path_finder/dfs";
 
 type Props = {
   initialCoord: Vector2;
@@ -70,7 +71,7 @@ function Bot({ initialCoord, pointsCoords: pointsCoordsProp }: Props) {
         algorithmName,
         coord,
         map,
-        pointsCoords.current
+        pointsCoords.current,
       );
 
       setPath([coord, ...currentPath.current]);
@@ -89,7 +90,7 @@ function Bot({ initialCoord, pointsCoords: pointsCoordsProp }: Props) {
 
   function handlePoint() {
     const newCoords = pointsCoords.current.filter(
-      (pointCoord) => !isSamePosition(pointCoord, coord)
+      (pointCoord) => !isSamePosition(pointCoord, coord),
     );
 
     pointsCoords.current = newCoords;
@@ -113,13 +114,15 @@ function getNearestPath(
   algorithmName: Algorithm,
   botCoord: Vector2,
   map: GameMap,
-  pointsCoords: Vector2[]
+  pointsCoords: Vector2[],
 ): Vector2[] {
   switch (algorithmName) {
     case "bfs":
       return bfs(botCoord, pointsCoords, map);
     case "djkstra":
       return djkstra(botCoord, pointsCoords, map);
+    case "dfs":
+      return dfs(botCoord, pointsCoords, map);
     case "salesman":
       return salesman(botCoord, pointsCoords, map);
   }

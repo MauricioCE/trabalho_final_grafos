@@ -1,6 +1,6 @@
 export type Actors = "player" | "bot" | "none";
 
-export type Algorithm = "bfs" | "djkstra" | "salesman";
+export type Algorithm = "bfs" | "djkstra" | "salesman" | "dfs";
 
 export type Direction = "up" | "down" | "left" | "right";
 
