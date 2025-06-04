@@ -1,7 +1,7 @@
 import { Stage } from "../common/types";
 
 export const stage_2: Stage = {
-  stageName: "Fase 2 - bfs mudar",
+  stageName: "Fase 2 - BFS",
   nextStage: "3",
   algorithm: "bfs",
   maxPoints: 12,

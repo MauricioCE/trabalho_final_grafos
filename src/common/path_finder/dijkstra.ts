@@ -25,11 +25,11 @@ class MinHeap<T> {
   }
 
   /**
- * move o ultimo elemento inserido para cima na heap até que a propriedade da heap seja restaurada
- * compara a prioridade do elemento com a prioridade do seu pai e troca eles
- * se a prioridade do elemento for menor. Repete esse processo até que o elemento 
- * esteja na posição correta ou se torne a raiz.
- */
+   * move o ultimo elemento inserido para cima na heap até que a propriedade da heap seja restaurada
+   * compara a prioridade do elemento com a prioridade do seu pai e troca eles
+   * se a prioridade do elemento for menor. Repete esse processo até que o elemento
+   * esteja na posição correta ou se torne a raiz.
+   */
   private bubbleUp() {
     let idx = this.heap.length - 1;
     const element = this.heap[idx];
@@ -53,8 +53,8 @@ class MinHeap<T> {
     let idx = 0;
     const length = this.heap.length;
     while (true) {
-      let leftIdx = 2 * idx + 1;
-      let rightIdx = 2 * idx + 2;
+      const leftIdx = 2 * idx + 1;
+      const rightIdx = 2 * idx + 2;
       let swap = idx;
 
       if (
@@ -95,10 +95,10 @@ export function djkstra(
     const { coord } = node.value;
     const costSoFar = node.priority;
     const key = `${coord.x},${coord.y}`;
-    
+
     //se o custo atual é maior que o menor custo já registrado para essa coordenada em (key), então ignora esse caminho.
     if (costSoFar > (dist[key] ?? Infinity)) continue;
-    
+
     // se chegou em um dos pontos de destino, reconstrói o caminho
     if (pointsCoords.some((p) => p.x === coord.x && p.y === coord.y)) {
       const path: Vector2[] = [];

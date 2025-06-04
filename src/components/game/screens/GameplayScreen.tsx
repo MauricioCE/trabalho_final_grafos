@@ -54,12 +54,15 @@ export default function GameplayScreen() {
 
   function handleStageEnded() {
     if (result === "win") {
+      const nextStage =
+        stage.nextStage !== "" ? `/stage/${stage.nextStage}` : "/win";
+
       setGameState("not-initialized");
       setResult(null);
       setShowCounter(true);
       setPlayerScore(0);
       setBotScore(0);
-      navigate(`/stage/${stage.nextStage}`);
+      navigate(nextStage);
       setAlgorithm(stage.algorithm);
       return;
     }

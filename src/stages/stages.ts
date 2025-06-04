@@ -3,6 +3,7 @@ import { stage_tutorial } from "./stage_tutorial";
 import { stage_1 } from "./stage_1";
 import { stage_2 } from "./stage_2";
 import { stage_3 } from "./stage_3";
+import { stage_4 } from "./stage_4";
 
 const stages = {
   stage_test: stage_test,
@@ -10,6 +11,7 @@ const stages = {
   stage_1: stage_1,
   stage_2: stage_2,
   stage_3: stage_3,
+  stage_4: stage_4,
 };
 
 export function getStage(id: string) {
