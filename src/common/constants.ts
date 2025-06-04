@@ -24,9 +24,9 @@ export const Constants = {
   },
   tilesSpeed: {
     default: 0.1,
-    slow1: 0.4,
-    slow2: 0.6,
-    slow3: 1,
+    slow1: 0.3,
+    slow2: 0.9,
+    slow3: 1.6,
     tree: 0.1,
   },
   textSize: {

@@ -1,9 +1,12 @@
-import { stage_test } from "./stage_test";
-import { stage_tutorial } from "./stage_tutorial";
-import { stage_1 } from "./stage_1";
-import { stage_2 } from "./stage_2";
-import { stage_3 } from "./stage_3";
-import { stage_4 } from "./stage_4";
+import { createStage } from "./createStage";
+
+const stage_test = createStage("Fase teste", "2", "djkstra");
+const stage_tutorial = createStage("Fase tutorial", "2", "djkstra");
+
+const stage_1 = createStage("Fase 1 - DFS", "2", "dfs");
+const stage_2 = createStage("Fase 2 - BFS", "2", "bfs");
+const stage_3 = createStage("Fase 3 - Salesman", "2", "salesman");
+const stage_4 = createStage("Fase 4 - Djkstra", "2", "djkstra");
 
 const stages = {
   stage_test: stage_test,
@@ -16,6 +19,8 @@ const stages = {
 
 export function getStage(id: string) {
   const key = `stage_${id}`;
+
+  console.log(id);
 
   if (key in stages) {
     return stages[key as keyof typeof stages];
