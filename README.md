@@ -1,31 +1,45 @@
-# Projeto final da cadeira de Grafos
+# 🎮 Jogo de Algoritmos de Busca de Caminho 🧩
 
-## Tema
+**Link para o projeto no GitHub:** https://github.com/MauricioCE/trabalho_final_grafos
 
-## Inspiração
+---
 
-## Roadmap
+## 🚀 Algoritmos Implementados
 
-Os seguintes algoritmos já foram implementados:
+- Depth-First Search (DFS) ou Busca em Profundidade
+- Breadth-First Search (BFS) ou Busca em Largura
+- Problema do Caixeiro Viajante (TSP)
+- Algoritmo de Dijkstra
 
-- [x] Depth-First Search (DFS) ou Busca em Profundidade
-- [x] Bread First Search (BFS) ou Busca em Largura
-- [x] Caixeiro Viajante
-- [x] Algoritmo de Dijkstra
+---
 
-## Tecnologias utilizadas
+## 🛠️ Tecnologias Utilizadas
 
 - **Frontend:** React
-- **Builder:** Vite
-- **Linguagem:** Typescript
+- **Build Tool:** Vite
+- **Linguagem:** TypeScript
 - **CSS-in-JS:** Emotion
-- **State Management:** Zustand
+- **Gerenciamento de Estado:** Zustand
 
-Local dos algoritmos
-src\common\path_finder
+---
 
-Local do Bot
-src\components\game\actors\Bot.tsx
+## ⚙️ Instalação & Como Rodar
 
-Local de todos os types
-src\common\types.ts
+1.  **Clone o repositório (opcional):**
+    ```bash
+    git clone [https://github.com/MauricioCE/trabalho_final_grafos.git](https://github.com/MauricioCE/trabalho_final_grafos.git)
+    cd trabalho_final_grafos
+    ```
+2.  **Instale as dependências:**
+    ```bash
+    npm install
+    ```
+3.  **Inicie o servidor:**
+
+    ```bash
+    vite
+    ```
+
+    Acesse o jogo no seu navegador (geralmente `http://localhost:5173`).
+
+4.  **Comece a jogar!** 🕹️
